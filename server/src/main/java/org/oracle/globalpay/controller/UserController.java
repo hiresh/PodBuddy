@@ -1,6 +1,6 @@
 package org.oracle.globalpay.controller;
 
-import java.util.List;
+import java.util.HashSet;
 
 import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.service.UserService;
@@ -19,7 +19,7 @@ public class UserController {
 	UserService userService;	
 	
 	@GetMapping("/users")
-	public List<User> getUsers() {
+	public HashSet<User> getUsers() {
 		return userService.getAllUsers();
 	}
 	
@@ -29,8 +29,8 @@ public class UserController {
 	}
 	
 	@PostMapping(value="/user", consumes="application/json")
-	public void addUser(@RequestBody User user) {		
-		userService.addUser(user);
+	public boolean addUser(@RequestBody User user) {		
+		return userService.addUser(user);
 	}
 	
 	@DeleteMapping(value="/user/{name}")
