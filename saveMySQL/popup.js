@@ -14,6 +14,48 @@ function copyOnClick(queryId) {
     document.body.removeChild(temp)
 }
 
+
+function displayRegisterForm(){
+	
+	$("#regForm").show();
+	
+	//bind event
+	$('#userNameButton').on('click',function(){
+	debugger;
+	var userId=$('#userName').val();
+	//call api to add the user
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST",urlPrefix+"/user",true);
+	xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+	var userData={
+					"registeredName":userId,
+					"lastRequest":null 	
+		
+				 }
+	xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+				 alert(this.responseText);
+				 if(this.responseText && this.responseText!=''){
+					chrome.storage.local.set({"userName":userId},function(){
+								displayUserQueries();
+							});
+					 
+					}
+					else{
+						$("#regError").html("<h3> User name already exists</h3>");
+					}
+		}
+	};			 
+	xhr.send(JSON.stringify(userData));
+	
+	//store the userName if uniqueID
+	
+});
+	
+}
+
+function displayUserQueries(){
+	$("#regForm").hide();
 var xhr = new XMLHttpRequest();
 xhr.open("GET", urlPrefix + "/userQueries")
 xhr.addEventListener("load", function (e) {
@@ -48,4 +90,21 @@ xhr.addEventListener("load", function (e) {
 })
 xhr.send()
 root.appendChild(outerList)
+}
 
+
+//if the storage has the key call displayUserQueries or let him register himself/herself
+chrome.storage.local.get(['userName'],function(result){
+	debugger;
+	
+	console.log("result is "+result.userName);
+	if(result.userName && result.userName!=''){
+		$("#regForm").hide();
+		displayUserQueries();
+	}
+	else{
+		
+		displayRegisterForm();
+	}
+		
+});
