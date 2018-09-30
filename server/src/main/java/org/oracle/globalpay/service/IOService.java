@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.HashSet;
 import java.util.List;
 
 import org.oracle.globalpay.model.Query;
@@ -39,9 +40,9 @@ public class IOService {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
 			Object obj = ois.readObject();
-			
+			System.out.println("************HIT*************");
 			if (type instanceof User) {
-				((UserService)objService).setUsers((List<User>)obj);
+				((UserService)objService).setUsers((HashSet<User>)obj);
 			}
 			else if (type instanceof Query) {
 				((QueryService)objService).setQueries((List<Query>)obj);
