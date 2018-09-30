@@ -1,11 +1,13 @@
 package org.oracle.globalpay.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.oracle.globalpay.model.User;
+import org.oracle.globalpay.serviceWrappers.Settable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,20 +15,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	List<User> users = new ArrayList<>();
+	HashSet<User> users = new HashSet<>();
 	@Value("${podbuddy.users.file}")
 	String usersFile;
 	@Autowired
 	UtilityService utilityService;
 	
-	public void setUsers(List<User> users) {
+	public void setUsers(HashSet<User> users) {
 		this.users = users;
+		
+		
 	}
 	
-	public void addUser(User user) {
-		users.add(user);
-		saveToFile();
-		
+	public boolean addUser(User user) {
+		if(users.add(user)){
+			saveToFile();
+			return true;
+		}
+		return false;
 	}
 	
 	public void removeUser(User user) {
@@ -45,7 +51,7 @@ public class UserService {
 		saveToFile();
 	}
 	
-	public List<User> getAllUsers() {
+	public HashSet<User> getAllUsers() {
 		return users;
 	}
 	
@@ -57,4 +63,6 @@ public class UserService {
 	public void loadFromFile() {
 		IOService.loadFromFile((new User()), usersFile, this);
 	}
+
+	
 }
