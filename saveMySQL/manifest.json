@@ -18,7 +18,7 @@
 	}
   ],
   "permissions": [
-          "contextMenus", "http://*/*", "https://*/*"
+          "contextMenus", "http://*/*", "https://*/*","storage"
         ],
   "background": {
 	"scripts": ["background.js"]
