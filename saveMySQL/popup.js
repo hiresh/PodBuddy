@@ -34,7 +34,7 @@ function displayRegisterForm(){
 				 }
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-				 alert(this.responseText);
+				 //alert(this.responseText);
 				 if(this.responseText && this.responseText!='false'){
 					chrome.storage.local.set({"userName":userId},function(){
 								displayUserQueries();
