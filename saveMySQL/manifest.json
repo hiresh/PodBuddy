@@ -1,0 +1,26 @@
+{
+  "name": "Save My SQL",
+  "version": "1.0",
+  "description": "Save named SQLs that are executed from Cloud EM. Reuse these commands later.",
+  "manifest_version": 2,
+  "browser_action": {
+	"default_icon": "dbicon.png",
+	"default_popup": "popup.html"
+  },
+  "icons": {
+	"128": "dbicon.png"
+  },
+  "content_scripts": [
+	{
+		"matches":["http://*/*", "https://*/*"],
+		"css": ["myCss.css"],
+		"js": ["myScript.js"]
+	}
+  ],
+  "permissions": [
+          "contextMenus", "http://*/*", "https://*/*"
+        ],
+  "background": {
+	"scripts": ["background.js"]
+  }
+}
