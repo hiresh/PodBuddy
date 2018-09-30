@@ -2,9 +2,24 @@
 <html>
   <head>
     <link rel="stylesheet" href="popup.css" />
+	<script src="jquery.js"></script>
+	<script src="popup.js"></script>
+	
   </head>
+  <style>
+	.popup{
+		height:489px;
+        width:700px;
+     }
+  </style>
   <body>
-    <div id="root"> </div>
-    <script src="popup.js"></script>
+    <div id="root" class="popup" >
+		<div id='regForm'>
+			<input type="text" id="userName"></input>
+			<button id='userNameButton'>Register</button>
+			<div id='regError'></div>
+		</div>
+	</div>
+    
   </body>
 </html>
