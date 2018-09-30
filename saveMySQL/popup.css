@@ -1,0 +1,54 @@
+:root {
+    --brad: 6px;
+}
+
+body {
+    width: 300px;
+    font-family: calibri;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.titleArea {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #d4d4d4;
+    padding: 2px 4px;
+}
+
+.title {
+    width: 100%;
+    font-weight: bold;
+}
+
+.caret-link {
+    padding-right: 5px;
+}
+.caret-link:hover {
+    cursor: pointer;
+}
+
+.copyButton {
+    justify-content: flex-end;
+    background-color: rgb(211, 211, 211);
+    border: 1px solid rgb(100, 100, 100);
+    font-size: .8em;
+    padding: 0 2px;
+}
+
+.buttonArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.hide {
+    z-index: -999;
+}
