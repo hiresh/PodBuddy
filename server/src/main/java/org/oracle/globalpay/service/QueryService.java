@@ -9,7 +9,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.oracle.globalpay.model.Query;
-import org.oracle.globalpay.serviceWrappers.Settable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @PropertySource("classpath:custom.properties")
-public class QueryService implements Settable<Query> {
+public class QueryService  {
 
 	private List<Query> queries = new ArrayList<>();
 	@Value("${podbuddy.queries.file}")
@@ -117,9 +116,5 @@ public class QueryService implements Settable<Query> {
 		IOService.loadFromFile((new Query()), queriesFile, this);
 	}
 
-	@Override
-	public void setEntity(List<Query> obj) {
-		// TODO Auto-generated method stub
-		setQueries(obj);
-	}
+	
 }
