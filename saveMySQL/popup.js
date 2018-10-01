@@ -101,7 +101,7 @@ root.appendChild(outerList)
 
 //if the storage has the key call displayUserQueries or let him register himself/herself
 chrome.storage.local.get(['userName'],function(result){
-	debugger;
+	
 	
 	console.log("result is "+result.userName);
 	if(result.userName && result.userName!=''){
