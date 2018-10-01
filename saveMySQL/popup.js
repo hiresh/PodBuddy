@@ -1,8 +1,13 @@
-var root = document.getElementById("root")
-var outerList = document.createElement("div")
-var innerList = document.createElement("div")
+var root = null;
+var outerList = null;
+var innerList = null;
 var urlPrefix = "http://localhost:8080/podbuddy"
 var userQueries = ""
+$(document).ready(function(){
+	root=document.getElementById("root");
+	outerList = document.createElement("div");
+	innerList = document.createElement("div");
+});
 
 function copyOnClick(queryId) {
     // document.getElementById(queryId).select();
@@ -63,6 +68,7 @@ xhr.addEventListener("load", function (e) {
     var counter = 0
     userQueries.forEach(userQuery => {
         // get user
+	if(userQuery && userQuery.user && userQuery.user.registeredName){
         var user = userQuery.user.registeredName
         outerList.innerHTML += "<div class='user'>" + user + "</div>"
         // get queries
@@ -85,7 +91,7 @@ xhr.addEventListener("load", function (e) {
                 copyOnClick(this.id.replace("button", "query"))
             })
         })
-        
+	}
     });
 })
 xhr.send()
