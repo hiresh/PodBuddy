@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.model.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,12 @@ public class UtilityService {
 		List<UserQuery> userQueries = new ArrayList<>();
 		(queryService.getUsers()).forEach(u -> {
 			UserQuery userQuery = new UserQuery();
-			userQuery.setUser(userService.getUser(u));
+			User user=userService.getUser(u);
+			if(user!=null&&user.getRegisteredName()!=null&&!"".equals(user.getRegisteredName())){
+			userQuery.setUser(user);
 			userQuery.setQueries(queryService.getQueriesByAuthor(u));
 			userQueries.add(userQuery);
+			}
 		});
 		return userQueries;
 	}	
