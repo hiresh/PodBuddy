@@ -2,9 +2,7 @@ package org.oracle.globalpay.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-import org.oracle.globalpay.serviceWrappers.Settable;
 import org.springframework.stereotype.Component;
 
 @Component
