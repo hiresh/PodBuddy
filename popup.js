@@ -1,1 +1,0 @@
-//js for the extension UI
