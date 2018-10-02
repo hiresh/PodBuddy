@@ -109,7 +109,7 @@ chrome.storage.local.get(['userName'],function(result){
 		displayUserQueries();
 	}
 	else{
-		
+		chrome.storage.local.set({"contextMenuCounter":0},function(){});
 		displayRegisterForm();
 	}
 		
