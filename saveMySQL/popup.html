@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="popup.css" />
-	<script src="jquery.js"></script>
-	<script src="popup.js"></script>
-	
-  </head>
-  <style>
-	.popup{
-		height:489px;
-        width:700px;
-     }
-  </style>
-  <body>
-    <div id="root" class="popup" >
-		<div id='regForm'>
-			<input type="text" id="userName"></input>
-			<button id='userNameButton'>Register</button>
-			<div id='regError'></div>
-		</div>
-	</div>
-    
-  </body>
+
+<head>
+  <link rel="stylesheet" href="popup.css" />
+  <script src="jquery.js"></script>
+  <script src="popup.js"></script>
+
+</head>
+
+
+<body>
+  <div id="root" class="popup">
+    <div id="regForm">
+      <div>
+        <input type="text" id="userName" placeholder="Enter unique user name" />
+        <div id="regError"></div>
+      </div>
+      <button id="userNameButton" class="btn-medium">Register</button>
+    </div>
+
+  </div>
+
+</body>
+
 </html>
