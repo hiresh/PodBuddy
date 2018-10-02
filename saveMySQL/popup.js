@@ -77,7 +77,7 @@ xhr.addEventListener("load", function (e) {
         userQuery.queries.forEach(query => {
             queryString += ""
                 + "<div class='titleArea'><div class='title'><span class='caret-link'>&#x2b9c;</span>" + query.queryName + "</div>"
-                + "<div class='buttonArea'><button class='copyButton' id='button_" + counter
+                + "<div class='buttonArea'><button class='copyButton btn-small' id='button_" + counter
                 + "'>copy</button></div></div>"
                 + "<div class='subtitle'>" + query.description + "</div>"
                 + "<input type='hidden' id='query_" + counter + "' value='" + query.queryText + "' />"
