@@ -1,2 +1,0 @@
-# PodBuddy
-Google chrome extension 
