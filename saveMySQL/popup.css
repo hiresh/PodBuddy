@@ -45,6 +45,14 @@ button {
     justify-content: flex-start;
 }
 
+#querySearch {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 15px;
+    width: 277px;
+}
+
 .user {
     display: flex;
     flex-direction: row;
@@ -86,6 +94,21 @@ button {
 
 .hide {
     z-index: -999;
+}
+
+.deleteButton {
+    font-size: 1.5em;
+    padding: 0 3px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.deleteButton:hover {
+    opacity: .6;
+}
+
+.deleteButton:active {
+    opacity: 1;
 }
 
 .btn-medium {
