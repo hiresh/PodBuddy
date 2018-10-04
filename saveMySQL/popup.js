@@ -1,4 +1,4 @@
-var userName = ""
+var username = ""
 chrome.storage.local.get(['userName'], function (result) {
 	if (result.userName && result.userName != '') {
 		username = result.userName
@@ -61,7 +61,7 @@ function displayRegisterForm() {
 				//alert(this.responseText);
 				if (this.responseText && this.responseText != 'false') {
 					chrome.storage.local.set({ "userName": userId }, function () {
-						displayUserQueries();
+						displayUserQueries(userId);
 					});
 
 				}
@@ -78,7 +78,7 @@ function displayRegisterForm() {
 
 }
 
-function displayUserQueries() {
+function displayUserQueries(userNameForQ) {
 	$("#regForm").hide();
 
 	// add search text input to root.
@@ -86,54 +86,74 @@ function displayUserQueries() {
 	searchInput.setAttribute("type", "text")
 	searchInput.setAttribute("placeholder", "Search for query name, text or description")
 	root.appendChild(searchInput)
+	
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", urlPrefix + "/userQueries")
-	xhr.addEventListener("load", function (e) {
-		userQueries = JSON.parse(xhr.responseText)
-		var counter = 0
-		userQueries.forEach(userQuery => {
-			// get user
-			if (userQuery && userQuery.user && userQuery.user.registeredName) {
-				var user = userQuery.user.registeredName
-				outerList.innerHTML += "<div class='user'>" + user + "</div>"
-				// get queries
-
-				var queryString = ""
-				userQuery.queries.forEach(query => {
-					queryString += ""
-						+ "<div class='titleArea'><div class='title'><span class='caret-link'>&#x2b9c;</span>" + query.queryName + "</div>"
-						+ "<div class='buttonArea'>"
-						+ (username == user ? "<div class='deleteButton' id='delete_" + counter + "'>&times;</div>" : "")
-						+ "<button class='copyButton btn-small' id='button_" + counter + "'>copy</button></div></div>"
-						+ "<div class='subtitle'>" + query.description + "</div>"
-						+ "<input type='hidden' id='query_" + counter + "' value='" + query.queryText + "' />"
-						+ "<input type='hidden' id='queryName_" + counter + "' value='" + query.queryName + "' />"
-					counter++
-				})
-
-				outerList.innerHTML += queryString + "<br/>"
-				var buttons = document.querySelectorAll("button")
-				buttons.forEach(button => {
-					button.addEventListener("click", function () {
-						copyOnClick(this.id.replace("button", "query"))
-					})
-				})
-
-				var delButtons = document.querySelectorAll(".deleteButton")
-				delButtons.forEach(delButton => {
-					delButton.addEventListener("click", function () {
-						deleteOnClick(username, this.id.replace("delete", "queryName"))
-					})
-				})
-			}
-		});
-	})
-	xhr.send()
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", urlPrefix + "/userQueries/"+userNameForQ+"/")
+			xhr.addEventListener("load", function (e) {
+				if(xhr.responseText){
+				userQueries = JSON.parse(xhr.responseText)
+				}
+				
+				if(userQueries){
+					chrome.storage.local.set({ "userQueriesData": userQueries }, function () {});
+					paintUserQueries(userQueries);
+				}
+				else{
+					//set userqueries from the local storage and modularize the painting
+					chrome.storage.local.get(['userQueriesData'],function(result){
+						if(result.userQueriesData){
+							paintUserQueries(result.userQueriesData);
+						}
+					});
+				}
+			})
+			xhr.send();
+		
+	
 	root.appendChild(outerList)
 }
 
+function paintUserQueries(userQueries){
+	var counter = 0
+	
+	userQueries.forEach(userQuery => {
+				// get user
+				if (userQuery && userQuery.user && userQuery.user.registeredName) {
+					var user = userQuery.user.registeredName
+					outerList.innerHTML += "<div class='user'>" + user + "</div>"
+					// get queries
 
+					var queryString = ""
+					userQuery.queries.forEach(query => {
+						queryString += ""
+							+ "<div class='titleArea'><div class='title'><span class='caret-link'>&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class='buttonArea'>"
+							+ (username == user ? "<div class='deleteButton' id='delete_" + counter + "'>&times;</div>" : "")
+							+ "<button class='copyButton btn-small' id='button_" + counter + "'>copy</button></div></div>"
+							+ "<div class='subtitle'>" + query.description + "</div>"
+							+ "<input type='hidden' id='query_" + counter + "' value='" + query.queryText + "' />"
+							+ "<input type='hidden' id='queryName_" + counter + "' value='" + query.queryName + "' />"
+						counter++
+					})
+
+					outerList.innerHTML += queryString + "<br/>"
+					var buttons = document.querySelectorAll("button")
+					buttons.forEach(button => {
+						button.addEventListener("click", function () {
+							copyOnClick(this.id.replace("button", "query"))
+						})
+					})
+
+					var delButtons = document.querySelectorAll(".deleteButton")
+					delButtons.forEach(delButton => {
+						delButton.addEventListener("click", function () {
+							deleteOnClick(username, this.id.replace("delete", "queryName"))
+						})
+					})
+				}
+			});
+}
 //if the storage has the key call displayUserQueries or let him register himself/herself
 chrome.storage.local.get(['userName'], function (result) {
 
@@ -141,7 +161,7 @@ chrome.storage.local.get(['userName'], function (result) {
 	console.log("result is " + result.userName);
 	if (result.userName && result.userName != '') {
 		$("#regForm").hide();
-		displayUserQueries();
+		displayUserQueries(result.userName);
 	}
 	else {
 

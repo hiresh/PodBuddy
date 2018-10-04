@@ -15,11 +15,7 @@ chrome.storage.local.get(['userName'], function (result) {
 });
 
 function saveQueryToServer(text) {
-	chrome.storage.local.get(['userName'], function (result) {
-		if (result.userName && result.userName != '') {
-			userName = result.userName;
-		}
-	});
+	
 
 	// Prompt section - Get query name and description
 	var queryName = ""
@@ -48,10 +44,16 @@ function saveQueryToServer(text) {
 	} // Prompt section ends
 	
 	//alert ("calling fn with "+queryName+"|"+queryDescription+"|"+text)
-	saveQueryViaContextMenu(queryName, queryDescription, text);
+	chrome.storage.local.get(['userName'], function (result) {
+		if (result.userName && result.userName != '') {
+			userName = result.userName;
+		}
+		saveQueryViaContextMenu(queryName, queryDescription, text,userName);
+	});
+	
 }
 
-function saveQueryViaContextMenu(queryName, queryDescription, text) {
+function saveQueryViaContextMenu(queryName, queryDescription, text,userName) {
 
 	var query = {
 		"queryText": text.selectionText,
