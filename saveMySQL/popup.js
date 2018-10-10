@@ -160,7 +160,7 @@ function paintUserQueries(userQueries){
 					
 					//get all the spans with caret class and bind a listner
 					
-					$(".caret-link").each(function(){
+					/*$(".caret-link").each(function(){
 						$(this).on('click',function(){
 							
 							sendMsgToPasteQuery($(this).parent().parent().next().next().val());
@@ -168,7 +168,7 @@ function paintUserQueries(userQueries){
 						});
 						
 					});
-					
+					*/
 					
 				}
 			});
