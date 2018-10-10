@@ -107,7 +107,16 @@ function displayUserQueries(userNameForQ) {
 						}
 					});
 				}
-			})
+			});
+			xhr.addEventListener("error",function(error){
+				if(this.status==0){
+					chrome.storage.local.get(['userQueriesData'],function(result){
+						if(result.userQueriesData){
+							paintUserQueries(result.userQueriesData);
+						}
+					});
+				}
+			});
 			xhr.send();
 		
 	
