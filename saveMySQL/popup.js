@@ -76,8 +76,8 @@ function displayRegisterForm() {
 
 	});
 
-}
 
+}
 function displayUserQueries(userNameForQ) {
 	$("#regForm").hide();
 
@@ -111,7 +111,13 @@ function displayUserQueries(userNameForQ) {
 			xhr.send();
 		
 	
-	root.appendChild(outerList)
+	root.appendChild(outerList);
+	//iterating outerList here and adding a listener seems naive, need to find out a way that binds listener
+	//in paintUserQueries function (adding inline script is not allowed)
+}
+
+function sendMsgToPasteQuery(qText){
+	chrome.runtime.sendMessage({qTextKey:qText},function(){});
 }
 
 function paintUserQueries(userQueries){
@@ -127,12 +133,12 @@ function paintUserQueries(userQueries){
 					var queryString = ""
 					userQuery.queries.forEach(query => {
 						queryString += ""
-							+ "<div class='titleArea'><div class='title'><span class='caret-link'>&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class='titleArea'><div class='title'><span class='caret-link' >&#x2b9c;</span>" + query.queryName + "</div>"
 							+ "<div class='buttonArea'>"
 							+ (username == user ? "<div class='deleteButton' id='delete_" + counter + "'>&times;</div>" : "")
 							+ "<button class='copyButton btn-small' id='button_" + counter + "'>copy</button></div></div>"
 							+ "<div class='subtitle'>" + query.description + "</div>"
-							+ "<input type='hidden' id='query_" + counter + "' value='" + query.queryText + "' />"
+							+ "<input type='hidden' class='qText' id='query_" + counter + "' value='" + query.queryText + "' />"
 							+ "<input type='hidden' id='queryName_" + counter + "' value='" + query.queryName + "' />"
 						counter++
 					})
@@ -151,6 +157,19 @@ function paintUserQueries(userQueries){
 							deleteOnClick(username, this.id.replace("delete", "queryName"))
 						})
 					})
+					
+					//get all the spans with caret class and bind a listner
+					
+					$(".caret-link").each(function(){
+						$(this).on('click',function(){
+							
+							sendMsgToPasteQuery($(this).parent().parent().next().next().val());
+							
+						});
+						
+					});
+					
+					
 				}
 			});
 }
