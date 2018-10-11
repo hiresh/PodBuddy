@@ -86,7 +86,11 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("type", "text")
 	searchInput.setAttribute("placeholder", "Search for query name, text or description")
 	root.appendChild(searchInput)
-	
+	chrome.storage.local.get(['userQueriesData'],function(result){
+						if(result.userQueriesData){
+							paintUserQueries(result.userQueriesData);
+						}
+					});
 
 			var xhr = new XMLHttpRequest();
 			xhr.open("GET", urlPrefix + "/userQueries/"+userNameForQ+"/")
@@ -131,7 +135,7 @@ function sendMsgToPasteQuery(qText){
 
 function paintUserQueries(userQueries){
 	var counter = 0
-	
+	outerList.innerHTML="";
 	userQueries.forEach(userQuery => {
 				// get user
 				if (userQuery && userQuery.user && userQuery.user.registeredName) {
