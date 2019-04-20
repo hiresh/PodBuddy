@@ -14,8 +14,18 @@ $(document).ready(function () {
 	root = document.getElementById("root");
 	outerList = document.createElement("div");
 	innerList = document.createElement("div");
-	searchInput = document.createElement("input")
+	searchInput = document.createElement("input");
+	sendURLMessage();
 });
+
+function sendURLMessage(){
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		//debugger;
+    var activeTab = tabs[0];
+	
+    chrome.tabs.sendMessage(activeTab.id, {"message": activeTab.url });
+	});
+}
 
 function copyOnClick(queryId) {
 	// document.getElementById(queryId).select();
@@ -130,7 +140,13 @@ function displayUserQueries(userNameForQ) {
 }
 
 function sendMsgToPasteQuery(qText){
-	chrome.runtime.sendMessage({qTextKey:qText},function(){});
+	//alert(qText);
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		//debugger;
+    var activeTab = tabs[0];
+	
+    chrome.tabs.sendMessage(activeTab.id, {"message": qText });
+	});
 }
 
 function paintUserQueries(userQueries){
@@ -172,16 +188,19 @@ function paintUserQueries(userQueries){
 					})
 					
 					//get all the spans with caret class and bind a listner
-					
-					/*$(".caret-link").each(function(){
+					var caretObjects =$(".caret-link");
+					debugger;
+					$(".caret-link").each(function(){
+						debugger;
+						console.log("called binder");
 						$(this).on('click',function(){
-							
+							console.log("clicked caret");
 							sendMsgToPasteQuery($(this).parent().parent().next().next().val());
 							
 						});
 						
 					});
-					*/
+					
 					
 				}
 			});

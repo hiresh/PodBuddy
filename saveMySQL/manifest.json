@@ -1,5 +1,5 @@
 {
-  "name": "Save My SQL",
+  "name": "Save My SQL Fresh clone",
   "version": "1.0",
   "description": "Save named SQLs that are executed from Cloud EM. Reuse these commands later.",
   "manifest_version": 2,
@@ -14,11 +14,11 @@
 	{
 		"matches":["http://*/*", "https://*/*"],
 		"css": ["myCss.css"],
-		"js": ["myScript.js"]
+		"js": ["jquery.js","myscript.js"]
 	}
   ],
   "permissions": [
-          "contextMenus", "http://*/*", "https://*/*","storage"
+          "contextMenus", "http://*/*", "https://*/*","storage","activeTab","tabs"
         ],
   "background": {
 	"scripts": ["background.js"]
