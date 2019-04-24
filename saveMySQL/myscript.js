@@ -11,22 +11,22 @@
 
 debugger;
 
-var alterQueryPasted=false;
+
  chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		 debugger;
- 
+		 var txtArea=$("textarea").eq(0);
 		  //alert('in content script '+request.message);
-		  if(!alterQueryPasted&&request.message.startsWith("https://cloudem")){
-			  var txtArea=$("textarea");
-			  if(txtArea.html()=='')
-			txtArea.html("alter session set current_schema=FUSION;\n\n");
+		  if(request.message.startsWith("https://cloudem")){
+			  
+			  if(txtArea.val()=='')
+			txtArea.val("alter session set current_schema=FUSION;\n\n");
 			
-			alterQueryPasted=true;
+			
 		  }
         else if( request.message &&  !request.message.startsWith("https://cloudem")) {
 			//alert(request.message);
-         $("textarea").html($("textarea").html()+"\n\n"+request.message);
+         txtArea.val(txtArea.val()+"\n\n"+request.message);
              }
       }
     );
