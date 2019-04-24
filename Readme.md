@@ -5,7 +5,7 @@
 * Access the *Load unpacked* option on top left corner
 * Select the folder where the previously download zip was extracted
 * Tiny icon for *podbuddy* will appear next to URL bar 
-* Register with your GUID 
+* Register with your GUID after clicking on the podbuddy icon.
 
 # Usage
 
