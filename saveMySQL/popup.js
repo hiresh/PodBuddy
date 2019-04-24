@@ -102,7 +102,7 @@ function displayUserQueries(userNameForQ) {
 							paintUserQueries(result.userQueriesData);
 						}
 					});
-
+			debugger;
 			var xhr = new XMLHttpRequest();
 			xhr.open("GET", urlPrefix + "/userQueries/"+userNameForQ+"/")
 			xhr.addEventListener("load", function (e) {
@@ -125,6 +125,7 @@ function displayUserQueries(userNameForQ) {
 			});
 			xhr.addEventListener("error",function(error){
 				if(this.status==0){
+					console.log("error");
 					chrome.storage.local.get(['userQueriesData'],function(result){
 						if(result.userQueriesData){
 							paintUserQueries(result.userQueriesData);
@@ -159,18 +160,23 @@ function paintUserQueries(userQueries){
 					var user = userQuery.user.registeredName
 					outerList.innerHTML += "<div class='user'>" + user + "</div>"
 					// get queries
-
-					var queryString = ""
+					
+					debugger;
+					var queryString = "";
+					
 					userQuery.queries.forEach(query => {
+						
 						queryString += ""
-							+ "<div class='titleArea'><div class='title'><span class='caret-link' >&#x2b9c;</span>" + query.queryName + "</div>"
-							+ "<div class='buttonArea'>"
-							+ (username == user ? "<div class='deleteButton' id='delete_" + counter + "'>&times;</div>" : "")
-							+ "<button class='copyButton btn-small' id='button_" + counter + "'>copy</button></div></div>"
-							+ "<div class='subtitle'>" + query.description + "</div>"
-							+ "<input type='hidden' class='qText' id='query_" + counter + "' value='" + query.queryText + "' />"
-							+ "<input type='hidden' id='queryName_" + counter + "' value='" + query.queryName + "' />"
-						counter++
+							+ "<div class=\"titleArea\"><div class=\"title\"><span class=\"caret-link\" >&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class=\"buttonArea\">"
+							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\">&times;</div>" : "")
+							+ "<button class=\"copyButton btn-small\" id=\"button_" + counter + "\">copy</button></div></div>"
+							+ "<div class=\"subtitle\">" + query.description + "</div>"
+							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
+							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" />"
+							
+						counter++;
+						console.log(queryString);
 					})
 
 					outerList.innerHTML += queryString + "<br/>"
