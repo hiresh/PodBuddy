@@ -19,13 +19,17 @@ debugger;
 		  //alert('in content script '+request.message);
 		  if(request.message.startsWith("https://cloudem")){
 			  
-			  if(txtArea.val()=='')
-			txtArea.val("alter session set current_schema=FUSION;\n\n");
-			
-			
+			  if(txtArea.val()==''){
+				  txtArea.val("alter session set current_schema=FUSION;");
+				  document.getElementById('selectOnlyMode').checked = false;
+				document.getElementById('executeBtn').click();
+			  }
 		  }
         else if( request.message &&  !request.message.startsWith("https://cloudem")) {
 			//alert(request.message);
+			if(txtArea.val()=="alter session set current_schema=FUSION;"){
+				  txtArea.val(txtArea.val() + "\n\n");
+			  }
          txtArea.val(txtArea.val()+"\n\n"+request.message);
              }
       }
