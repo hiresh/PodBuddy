@@ -48,7 +48,8 @@ function saveQueryToServer(text) {
 		if (result.userName && result.userName != '') {
 			userName = result.userName;
 		}
-		saveQueryViaContextMenu(queryName, queryDescription, text,userName);
+		if(queryName!=null && queryDescription!=null)
+			saveQueryViaContextMenu(queryName, queryDescription, text,userName);
 	});
 	
 }
