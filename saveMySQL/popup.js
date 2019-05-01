@@ -243,22 +243,35 @@ function paintUserQueries(userQueries){
 
 
 function searchFunction() {
-    var input, filter,a, i, txtValue,varTitle,varQueryInfo;
+    var input, filter,a, i,j, txtValue,varTitle,varCardInfo;
     input = document.getElementById("querySearch");
     filter = input.value.toUpperCase();
-    varQueryInfo = document.getElementsByClassName("queryInfo");
-    // li = ul.getElementsByTagName("li");
 
-    for (i = 0; i < varQueryInfo.length; i++) {
-		varTitle = varQueryInfo[i].getElementsByClassName("title");
-        txtValue = varTitle[0].textContent || varTitle[0].innerText;
-        console.log(txtValue);
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            varQueryInfo[i].style.display = "";
-        } else {
-            varQueryInfo[i].style.display = "none";
-        }
-    }
+	varCardInfo = document.getElementsByClassName("card");
+
+	for (i = 0; i < varCardInfo.length; i++) {
+		var varQueryInfo;
+		var isQueryFound = false;
+		varQueryInfo = varCardInfo[i].getElementsByClassName("queryInfo");
+
+		for (j = 0; j < varQueryInfo.length; j++) {
+			varTitle = varQueryInfo[j].getElementsByClassName("title");
+			txtValue = varTitle[0].textContent || varTitle[0].innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+	            varQueryInfo[j].style.display = "";
+	            isQueryFound = true;
+			} else {
+	            varQueryInfo[j].style.display = "none";
+			}
+		}
+
+		if(!isQueryFound){
+			varCardInfo[i].style.display = "none";
+		}
+		if (filter==="" || filter === null) {
+			varCardInfo[i].style.display = "";
+		}
+	}
 }
 
 
