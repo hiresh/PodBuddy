@@ -9,7 +9,7 @@ var root = null;
 var outerList = null;
 var innerList = null;
 
-//var urlPrefix = "http://localhost:8080/podbuddy"
+// var urlPrefix = "http://localhost:8080/podbuddy"
 var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
@@ -268,7 +268,7 @@ function searchFunction() {
 		if(!isQueryFound){
 			varCardInfo[i].style.display = "none";
 		}
-		if (filter==="" || filter === null) {
+		if (isQueryFound || filter==="" || filter === null) {
 			varCardInfo[i].style.display = "";
 		}
 	}
