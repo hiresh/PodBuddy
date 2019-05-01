@@ -8,6 +8,7 @@ chrome.storage.local.get(['userName'], function (result) {
 var root = null;
 var outerList = null;
 var innerList = null;
+
 //var urlPrefix = "http://localhost:8080/podbuddy"
 var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
@@ -96,6 +97,7 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("id", "querySearch")
 	searchInput.setAttribute("type", "text")
 	searchInput.setAttribute("placeholder", "Search for query name, text or description")
+	searchInput.addEventListener('keyup', function() { searchFunction(); });
 	root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
 						if(result.userQueriesData){
@@ -152,34 +154,60 @@ function sendMsgToPasteQuery(qText){
 }
 
 function paintUserQueries(userQueries){
-	var counter = 0
+	var counter = 0;
+	var userCounter = 0;
 	outerList.innerHTML="";
+	outerList.setAttribute("id","accordion");
 	userQueries.forEach(userQuery => {
+				userCounter++;
 				// get user
 				if (userQuery && userQuery.user && userQuery.user.registeredName) {
+
+					var divCard = null;
+					var divCardHeader = null;
+					var divCardInner = null;
+
+					divCard = document.createElement("div");
+					divCardHeader = document.createElement("div");
+					divCardInner = document.createElement("div");
+
+
+					divCard.innerHTML="";
+					divCard.setAttribute("class","card");
+
+					divCardHeader.innerHTML="";
+					divCardHeader.setAttribute("class","card-header");
+
 					var user = userQuery.user.registeredName
-					outerList.innerHTML += "<div class='user'>" + user + "</div>"
+					divCardHeader.innerHTML += "<a data-toggle=\"collapse\" href=\"#collapse"+userCounter+"\">" + user + "</a>"
+					divCard.appendChild(divCardHeader);
 					// get queries
 					
 					debugger;
+
+					divCardInner.innerHTML = "";
+					divCardInner.setAttribute("id","collapse"+userCounter);
+					divCardInner.setAttribute("class","collapse"+ ((userCounter==1)?" show":""));
+					divCardInner.setAttribute("data-parent","#accordion");
 					var queryString = "";
-					
 					userQuery.queries.forEach(query => {
-						
+
 						queryString += ""
-							+ "<div class=\"titleArea\"><div class=\"title\"><span class=\"caret-link\" >&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><span class=\"caret-link\" >&#x2b9c;</span>" + query.queryName + "</div>"
 							+ "<div class=\"buttonArea\">"
 							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\">&times;</div>" : "")
 							+ "<button class=\"copyButton btn-small\" id=\"button_" + counter + "\">copy</button></div></div>"
 							+ "<div class=\"subtitle\">" + query.description + "</div>"
 							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
-							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" />"
+							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" /></div>"
 							
 						counter++;
 						console.log(queryString);
 					})
 
-					outerList.innerHTML += queryString + "<br/>"
+					divCardInner.innerHTML += queryString + "<br/>"
+					divCard.appendChild(divCardInner);
+					outerList.appendChild(divCard);
 					var buttons = document.querySelectorAll("button")
 					buttons.forEach(button => {
 						button.addEventListener("click", function () {
@@ -212,6 +240,28 @@ function paintUserQueries(userQueries){
 				}
 			});
 }
+
+
+function searchFunction() {
+    var input, filter,a, i, txtValue,varTitle,varQueryInfo;
+    input = document.getElementById("querySearch");
+    filter = input.value.toUpperCase();
+    varQueryInfo = document.getElementsByClassName("queryInfo");
+    // li = ul.getElementsByTagName("li");
+
+    for (i = 0; i < varQueryInfo.length; i++) {
+		varTitle = varQueryInfo[i].getElementsByClassName("title");
+        txtValue = varTitle[0].textContent || varTitle[0].innerText;
+        console.log(txtValue);
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            varQueryInfo[i].style.display = "";
+        } else {
+            varQueryInfo[i].style.display = "none";
+        }
+    }
+}
+
+
 //if the storage has the key call displayUserQueries or let him register himself/herself
 chrome.storage.local.get(['userName'], function (result) {
 

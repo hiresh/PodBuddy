@@ -1,4 +1,4 @@
-
+// var urlPrefix = "http://localhost:8080/podbuddy"
 var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 chrome.contextMenus.create({
 	title: "Add SQL to Repository fresh",
