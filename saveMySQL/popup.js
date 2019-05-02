@@ -238,7 +238,7 @@ function paintUserQueries(userQueries){
 					$(".caret-link").each(function(){
 						debugger;
 						console.log("called binder");
-						$(this).on('click',function(){
+						$(this).off('click').on('click',function(){
 							console.log("clicked caret");
 							sendMsgToPasteQuery($(this).parent().parent().next().next().val());
 							
