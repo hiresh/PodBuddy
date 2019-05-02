@@ -48,9 +48,9 @@ button {
 #querySearch {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    margin-bottom: 15px;
-    width: 277px;
+    /*justify-content: center;*/
+    /*margin-bottom: 15px;*/
+    /*width: 277px;*/
 }
 
 .user {
@@ -72,7 +72,12 @@ button {
 
 .title {
     width: 100%;
+    font-size: 14px;
     font-weight: bold;
+}
+
+.btn{
+    size: 10px;
 }
 
 .caret-link {
@@ -92,15 +97,23 @@ button {
     justify-content: flex-end;
 }
 
+.btn-sm{
+  padding: 0.1rem 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
 .hide {
     z-index: -999;
 }
 
 .deleteButton {
-    font-size: 1.5em;
-    padding: 0 3px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.7rem;
     font-weight: bold;
     cursor: pointer;
+    color: red;
 }
 
 .deleteButton:hover {

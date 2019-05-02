@@ -96,9 +96,10 @@ function displayUserQueries(userNameForQ) {
 	// add search text input to root.
 	searchInput.setAttribute("id", "querySearch")
 	searchInput.setAttribute("type", "text")
-	searchInput.setAttribute("placeholder", "Search for query name, text or description")
+	searchInput.setAttribute("class","form-control form-control mb-2 mu-2");
+	searchInput.setAttribute("placeholder", "Search for Query Name")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
-	root.appendChild(searchInput)
+	// root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
 						if(result.userQueriesData){
 							paintUserQueries(result.userQueriesData);
@@ -157,7 +158,9 @@ function paintUserQueries(userQueries){
 	var counter = 0;
 	var userCounter = 0;
 	outerList.innerHTML="";
+	outerList.appendChild(searchInput);
 	outerList.setAttribute("id","accordion");
+	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
 	userQueries.forEach(userQuery => {
 				userCounter++;
 				// get user
@@ -166,20 +169,22 @@ function paintUserQueries(userQueries){
 					var divCard = null;
 					var divCardHeader = null;
 					var divCardInner = null;
+					var divCardBody = null;
 
 					divCard = document.createElement("div");
 					divCardHeader = document.createElement("div");
 					divCardInner = document.createElement("div");
+					divCardBody = document.createElement("div");
 
 
 					divCard.innerHTML="";
-					divCard.setAttribute("class","card");
+					divCard.setAttribute("class","card mb-2");
 
 					divCardHeader.innerHTML="";
-					divCardHeader.setAttribute("class","card-header");
+					divCardHeader.setAttribute("class","card-header z-depth-1 text-uppercase");
 
 					var user = userQuery.user.registeredName
-					divCardHeader.innerHTML += "<a data-toggle=\"collapse\" href=\"#collapse"+userCounter+"\">" + user + "</a>"
+					divCardHeader.innerHTML += "<i class=\"fa fa-user fa-fw\" aria-hidden=\"true\"></i>&nbsp; <a data-toggle=\"collapse\" href=\"#collapse"+userCounter+"\">" + user + "</a>"
 					divCard.appendChild(divCardHeader);
 					// get queries
 					
@@ -193,11 +198,11 @@ function paintUserQueries(userQueries){
 					userQuery.queries.forEach(query => {
 
 						queryString += ""
-							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><span class=\"caret-link\" >&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><i class=\"caret-link fa fa-arrow-circle-left\" >&nbsp</i>" + query.queryName + "</div>"
 							+ "<div class=\"buttonArea\">"
-							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\">&times;</div>" : "")
-							+ "<button class=\"copyButton btn-small\" id=\"button_" + counter + "\">copy</button></div></div>"
-							+ "<div class=\"subtitle\">" + query.description + "</div>"
+							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\"><i class=\"fa fa-trash\"></i></div>" : "")
+							+ "<button class=\"copyButton btn btn-outline-dark btn-sm\" id=\"button_" + counter + "\"><i class=\"fa fa-copy\"></i></button></div></div>"
+							+ "<div class=\"blockquote-footer\">" + query.description + "</div>"
 							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
 							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" /></div>"
 							
@@ -205,7 +210,12 @@ function paintUserQueries(userQueries){
 						console.log(queryString);
 					})
 
-					divCardInner.innerHTML += queryString + "<br/>"
+					divCardBody.innerHTML="";
+					divCardBody.setAttribute("class","card-body");
+
+					divCardBody.innerHTML += queryString;
+
+					divCardInner.appendChild(divCardBody);
 					divCard.appendChild(divCardInner);
 					outerList.appendChild(divCard);
 					var buttons = document.querySelectorAll("button")
