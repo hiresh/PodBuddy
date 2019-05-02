@@ -161,6 +161,20 @@ function paintUserQueries(userQueries){
 	outerList.appendChild(searchInput);
 	outerList.setAttribute("id","accordion");
 	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
+
+	userQueries.sort(function(a,b){
+			var x = a.user.registeredName.toLowerCase();
+			var y = b.user.registeredName.toLowerCase();			
+			
+			return x < y ? -1 : x > y ? 1 : 0;			
+
+	});
+
+	userQueries.sort(function(a,b){
+			if(a.user.registeredName.toLowerCase() == username.toLowerCase() ) {return -1;}
+			return 0;
+	});
+
 	userQueries.forEach(userQuery => {
 				userCounter++;
 				// get user
