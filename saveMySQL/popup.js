@@ -9,8 +9,8 @@ var root = null;
 var outerList = null;
 var innerList = null;
 
-// var urlPrefix = "http://localhost:8080/podbuddy"
-var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
+var urlPrefix = "http://localhost:8080/podbuddy"
+// var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
 	root = document.getElementById("root");
@@ -183,8 +183,8 @@ function paintUserQueries(userQueries){
 					divCardHeader.innerHTML="";
 					divCardHeader.setAttribute("class","card-header z-depth-1 text-uppercase");
 
-					var user = userQuery.user.registeredName
-					divCardHeader.innerHTML += "<i class=\"fa fa-user fa-fw\" aria-hidden=\"true\"></i>&nbsp; <a data-toggle=\"collapse\" href=\"#collapse"+userCounter+"\">" + user + "</a>"
+					var user = userQuery.user.registeredName					
+					divCardHeader.innerHTML += "<i class=\"fa fa-user fa-fw \" aria-hidden=\"true\"></i>&nbsp; <a data-toggle=\"collapse\" class=\"text-dark\" href=\"#collapse"+userCounter+"\">" + user + "</a> <span class=\"badge badge-pill badge-dark\">"+userQuery.queries.length+"</span>"
 					divCard.appendChild(divCardHeader);
 					// get queries
 					
@@ -260,8 +260,8 @@ function searchFunction() {
 	varCardInfo = document.getElementsByClassName("card");
 
 	for (i = 0; i < varCardInfo.length; i++) {
-		var varQueryInfo;
-		var isQueryFound = false;
+		var varQueryInfo;		
+		var intQueryCount = 0;
 		varQueryInfo = varCardInfo[i].getElementsByClassName("queryInfo");
 
 		for (j = 0; j < varQueryInfo.length; j++) {
@@ -269,17 +269,18 @@ function searchFunction() {
 			txtValue = varTitle[0].textContent || varTitle[0].innerText;
 			if (txtValue.toUpperCase().indexOf(filter) > -1) {
 	            varQueryInfo[j].style.display = "";
-	            isQueryFound = true;
+	            intQueryCount++;
 			} else {
 	            varQueryInfo[j].style.display = "none";
 			}
 		}
 
-		if(!isQueryFound){
+		if(intQueryCount==0){
 			varCardInfo[i].style.display = "none";
 		}
-		if (isQueryFound || filter==="" || filter === null) {
+		if (intQueryCount > 0 || filter==="" || filter === null) {
 			varCardInfo[i].style.display = "";
+			varCardInfo[i].getElementsByClassName("badge")[0].innerHTML = intQueryCount;
 		}
 	}
 }

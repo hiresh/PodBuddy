@@ -74,6 +74,7 @@ button {
     width: 100%;
     font-size: 14px;
     font-weight: bold;
+    word-break: break-word;
 }
 
 .btn{
@@ -85,6 +86,10 @@ button {
 }
 .caret-link:hover {
     cursor: pointer;
+}
+
+.badge{
+    float: right;
 }
 
 .copyButton {
