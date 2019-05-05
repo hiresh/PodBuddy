@@ -17,6 +17,7 @@ $(document).ready(function () {
 	outerList = document.createElement("div");
 	innerList = document.createElement("div");
 	searchInput = document.createElement("input");
+	offlineMarkerDiv= document.createElement("div");
 	sendURLMessage();
 });
 
@@ -99,6 +100,9 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("class","form-control form-control mb-2 mu-2");
 	searchInput.setAttribute("placeholder", "Search for Query Name")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
+	offlineMarkerDiv.setAttribute("id","offlineMarker");
+	offlineMarkerDiv.setAttribute("style","padding-bottom:4px");
+	
 	// root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
 						if(result.userQueriesData){
@@ -154,13 +158,38 @@ function sendMsgToPasteQuery(qText){
 	});
 }
 
+function ifNotConnectedHideDeleteIcon(hideDelIcons,showDelIcons){
+	
+	//using callbacks so that we dont need the async feature which kills perf
+	$.ajax({url: urlPrefix, success: function(result){
+		if(result){
+			showDelIcons();
+		}
+		else{
+			hideDelIcons();
+		}
+		
+  },error:function(error){
+	  console.log("error in ifNotConnectedHideDeleteIcon");
+	  hideDelIcons();
+	  
+  } 	});
+	
+	
+}
+
 function paintUserQueries(userQueries){
 	var counter = 0;
 	var userCounter = 0;
 	outerList.innerHTML="";
 	outerList.appendChild(searchInput);
+	outerList.appendChild(offlineMarkerDiv);
 	outerList.setAttribute("id","accordion");
 	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
+	$(offlineMarkerDiv).hide();
+	$(offlineMarkerDiv).html("<div style='background: antiquewhite;'><img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/><b><h8 style='font-size:smaller;'>offline, add/delete features not supported</h8><b></div>");
+	
+	
 
 	userQueries.sort(function(a,b){
 			var x = a.user.registeredName.toLowerCase();
@@ -232,6 +261,22 @@ function paintUserQueries(userQueries){
 					divCardInner.appendChild(divCardBody);
 					divCard.appendChild(divCardInner);
 					outerList.appendChild(divCard);
+					
+					var hideDelete=function(){
+						
+						//show offlineMarkerDiv
+						$(offlineMarkerDiv).show();
+						//disable delete icons
+						$(".deleteButton").hide();
+					}
+					var showDelete=function(){
+						$(offlineMarkerDiv).hide();
+						$(".deleteButton").show();
+					}
+					ifNotConnectedHideDeleteIcon(hideDelete,showDelete);
+					
+					
+					
 					var buttons = document.querySelectorAll("button")
 					buttons.forEach(button => {
 						button.addEventListener("click", function () {
@@ -242,7 +287,8 @@ function paintUserQueries(userQueries){
 					var delButtons = document.querySelectorAll(".deleteButton")
 					delButtons.forEach(delButton => {
 						$(delButton).off('click').on("click", function () {
-							deleteOnClick(username, this.id.replace("delete", "queryName"))
+							deleteOnClick(username, this.id.replace("delete", "queryName"));
+							
 						})
 					})
 					
@@ -259,6 +305,7 @@ function paintUserQueries(userQueries){
 						});
 						
 					});
+					
 					
 					
 				}
