@@ -105,8 +105,7 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("placeholder", "Search for Query Name")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
 	offlineMarkerDiv.setAttribute("id","offlineMarker");
-	offlineMarkerDiv.setAttribute("class","alert alert-danger small mb-2");
-	offlineMarkerDiv.setAttribute("style","padding : 0;");
+	offlineMarkerDiv.setAttribute("class","alert alert-danger small mb-2 p-0");
 	
 	// root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
