@@ -15,4 +15,4 @@
 * Click on the *caret icon* on the extension-page to populate the sql-worksheet's textarea with that query
 * Rest of the features are self explanatory (delete your queries, use copy button, default appearance of alter session queries)
 
-* search feature is not released in the intial version.
+

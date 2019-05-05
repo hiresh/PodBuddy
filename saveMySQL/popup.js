@@ -241,7 +241,7 @@ function paintUserQueries(userQueries){
 
 					var delButtons = document.querySelectorAll(".deleteButton")
 					delButtons.forEach(delButton => {
-						delButton.addEventListener("click", function () {
+						$(delButton).off('click').on("click", function () {
 							deleteOnClick(username, this.id.replace("delete", "queryName"))
 						})
 					})
