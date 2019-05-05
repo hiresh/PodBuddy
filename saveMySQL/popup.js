@@ -9,14 +9,15 @@ var root = null;
 var outerList = null;
 var innerList = null;
 
-// var urlPrefix = "http://localhost:8080/podbuddy"
-var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
+var urlPrefix = "http://localhost:8080/podbuddy"
+// var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
 	root = document.getElementById("root");
 	outerList = document.createElement("div");
 	innerList = document.createElement("div");
 	searchInput = document.createElement("input");
+	offlineMarkerDiv= document.createElement("div");
 	sendURLMessage();
 });
 
@@ -39,12 +40,16 @@ function copyOnClick(queryId) {
 	document.body.removeChild(temp)
 }
 
-function deleteOnClick(userName, queryId) {
-	var xhr = new XMLHttpRequest()
+function deleteOnClick(userName, queryId,jqDeleteBtn) {
+	
+	debugger;
+	jqDeleteBtn.parent().parent().parent().hide();
+	
+	var xhr = new XMLHttpRequest();
 	xhr.open("DELETE", urlPrefix + "/user/" + userName + "/query/" + document.getElementById(queryId).value)
 	xhr.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
-			location.reload()
+			//location.reload()
 		}
 	}
 	xhr.send(null)
@@ -96,9 +101,13 @@ function displayUserQueries(userNameForQ) {
 	// add search text input to root.
 	searchInput.setAttribute("id", "querySearch")
 	searchInput.setAttribute("type", "text")
-	searchInput.setAttribute("placeholder", "Search for query name, text or description")
+	searchInput.setAttribute("class","form-control form-control mb-2 mu-2");
+	searchInput.setAttribute("placeholder", "Search for Query Name")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
-	root.appendChild(searchInput)
+	offlineMarkerDiv.setAttribute("id","offlineMarker");
+	offlineMarkerDiv.setAttribute("style","padding-bottom:4px");
+	
+	// root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
 						if(result.userQueriesData){
 							paintUserQueries(result.userQueriesData);
@@ -153,11 +162,52 @@ function sendMsgToPasteQuery(qText){
 	});
 }
 
+function ifNotConnectedHideDeleteIcon(hideDelIcons,showDelIcons){
+	
+	//using callbacks so that we dont need the async feature which kills perf
+	$.ajax({url: urlPrefix, success: function(result){
+		if(result){
+			showDelIcons();
+		}
+		else{
+			hideDelIcons();
+		}
+		
+  },error:function(error){
+	  console.log("error in ifNotConnectedHideDeleteIcon");
+	  hideDelIcons();
+	  
+  } 	});
+	
+	
+}
+
 function paintUserQueries(userQueries){
 	var counter = 0;
 	var userCounter = 0;
 	outerList.innerHTML="";
+	outerList.appendChild(searchInput);
+	outerList.appendChild(offlineMarkerDiv);
 	outerList.setAttribute("id","accordion");
+	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
+	$(offlineMarkerDiv).hide();
+	$(offlineMarkerDiv).html("<div style='background: antiquewhite;'><img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/><b><h8 style='font-size:smaller;'>offline, add/delete features not supported</h8><b></div>");
+	
+	
+
+	userQueries.sort(function(a,b){
+			var x = a.user.registeredName.toLowerCase();
+			var y = b.user.registeredName.toLowerCase();			
+			
+			return x < y ? -1 : x > y ? 1 : 0;			
+
+	});
+
+	userQueries.sort(function(a,b){
+			if(a.user.registeredName.toLowerCase() == username.toLowerCase() ) {return -1;}
+			return 0;
+	});
+
 	userQueries.forEach(userQuery => {
 				userCounter++;
 				// get user
@@ -166,20 +216,22 @@ function paintUserQueries(userQueries){
 					var divCard = null;
 					var divCardHeader = null;
 					var divCardInner = null;
+					var divCardBody = null;
 
 					divCard = document.createElement("div");
 					divCardHeader = document.createElement("div");
 					divCardInner = document.createElement("div");
+					divCardBody = document.createElement("div");
 
 
 					divCard.innerHTML="";
-					divCard.setAttribute("class","card");
+					divCard.setAttribute("class","card mb-2");
 
 					divCardHeader.innerHTML="";
-					divCardHeader.setAttribute("class","card-header");
+					divCardHeader.setAttribute("class","card-header z-depth-1 text-uppercase");
 
-					var user = userQuery.user.registeredName
-					divCardHeader.innerHTML += "<a data-toggle=\"collapse\" href=\"#collapse"+userCounter+"\">" + user + "</a>"
+					var user = userQuery.user.registeredName					
+					divCardHeader.innerHTML += "<i class=\"fa fa-user fa-fw \" aria-hidden=\"true\"></i>&nbsp; <a data-toggle=\"collapse\" class=\"text-dark\" href=\"#collapse"+userCounter+"\">" + user + "</a> <span class=\"badge badge-pill badge-dark\">"+userQuery.queries.length+"</span>"
 					divCard.appendChild(divCardHeader);
 					// get queries
 					
@@ -193,11 +245,11 @@ function paintUserQueries(userQueries){
 					userQuery.queries.forEach(query => {
 
 						queryString += ""
-							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><span class=\"caret-link\" >&#x2b9c;</span>" + query.queryName + "</div>"
+							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><i class=\"caret-link fa fa-arrow-circle-left\" >&nbsp</i>" + query.queryName + "</div>"
 							+ "<div class=\"buttonArea\">"
-							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\">&times;</div>" : "")
-							+ "<button class=\"copyButton btn-small\" id=\"button_" + counter + "\">copy</button></div></div>"
-							+ "<div class=\"subtitle\">" + query.description + "</div>"
+							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\"><i class=\"fa fa-trash\"></i></div>" : "")
+							+ "<button class=\"copyButton btn btn-outline-dark btn-sm\" id=\"button_" + counter + "\"><i class=\"fa fa-copy\"></i></button></div></div>"
+							+ "<div class=\"blockquote-footer\">" + query.description + "</div>"
 							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
 							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" /></div>"
 							
@@ -205,9 +257,30 @@ function paintUserQueries(userQueries){
 						console.log(queryString);
 					})
 
-					divCardInner.innerHTML += queryString + "<br/>"
+					divCardBody.innerHTML="";
+					divCardBody.setAttribute("class","card-body");
+
+					divCardBody.innerHTML += queryString;
+
+					divCardInner.appendChild(divCardBody);
 					divCard.appendChild(divCardInner);
 					outerList.appendChild(divCard);
+					
+					var hideDelete=function(){
+						
+						//show offlineMarkerDiv
+						$(offlineMarkerDiv).show();
+						//disable delete icons
+						$(".deleteButton").hide();
+					}
+					var showDelete=function(){
+						$(offlineMarkerDiv).hide();
+						$(".deleteButton").show();
+					}
+					ifNotConnectedHideDeleteIcon(hideDelete,showDelete);
+					
+					
+					
 					var buttons = document.querySelectorAll("button")
 					buttons.forEach(button => {
 						button.addEventListener("click", function () {
@@ -217,8 +290,9 @@ function paintUserQueries(userQueries){
 
 					var delButtons = document.querySelectorAll(".deleteButton")
 					delButtons.forEach(delButton => {
-						delButton.addEventListener("click", function () {
-							deleteOnClick(username, this.id.replace("delete", "queryName"))
+						$(delButton).off('click').on("click", function () {
+							deleteOnClick(username, this.id.replace("delete", "queryName"),$(this));
+							
 						})
 					})
 					
@@ -228,13 +302,14 @@ function paintUserQueries(userQueries){
 					$(".caret-link").each(function(){
 						debugger;
 						console.log("called binder");
-						$(this).on('click',function(){
+						$(this).off('click').on('click',function(){
 							console.log("clicked caret");
 							sendMsgToPasteQuery($(this).parent().parent().next().next().val());
 							
 						});
 						
 					});
+					
 					
 					
 				}
@@ -250,8 +325,8 @@ function searchFunction() {
 	varCardInfo = document.getElementsByClassName("card");
 
 	for (i = 0; i < varCardInfo.length; i++) {
-		var varQueryInfo;
-		var isQueryFound = false;
+		var varQueryInfo;		
+		var intQueryCount = 0;
 		varQueryInfo = varCardInfo[i].getElementsByClassName("queryInfo");
 
 		for (j = 0; j < varQueryInfo.length; j++) {
@@ -259,17 +334,18 @@ function searchFunction() {
 			txtValue = varTitle[0].textContent || varTitle[0].innerText;
 			if (txtValue.toUpperCase().indexOf(filter) > -1) {
 	            varQueryInfo[j].style.display = "";
-	            isQueryFound = true;
+	            intQueryCount++;
 			} else {
 	            varQueryInfo[j].style.display = "none";
 			}
 		}
 
-		if(!isQueryFound){
+		if(intQueryCount==0){
 			varCardInfo[i].style.display = "none";
 		}
-		if (isQueryFound || filter==="" || filter === null) {
+		if (intQueryCount > 0 || filter==="" || filter === null) {
 			varCardInfo[i].style.display = "";
+			varCardInfo[i].getElementsByClassName("badge")[0].innerHTML = intQueryCount;
 		}
 	}
 }
