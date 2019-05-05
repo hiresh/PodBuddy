@@ -19,6 +19,7 @@
 
 * Delete and add features will be obviously not supported in offline mode
 * All other features of accessing queries, copying, automatic pasting on care-icon click to textarea will be supported.
+* Delete icons will not appear in offline mode and marker for offline status will be displayed.
 
-![offline marker image](https://github.com/hiresh/PodBuddy/blob/master/saveMySQL/readme.PNG)
+<img alt='offline' src='https://github.com/hiresh/PodBuddy/blob/master/saveMySQL/readme.PNG' width="300"/>
 
