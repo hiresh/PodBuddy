@@ -40,12 +40,16 @@ function copyOnClick(queryId) {
 	document.body.removeChild(temp)
 }
 
-function deleteOnClick(userName, queryId) {
-	var xhr = new XMLHttpRequest()
+function deleteOnClick(userName, queryId,jqDeleteBtn) {
+	
+	debugger;
+	jqDeleteBtn.parent().parent().parent().hide();
+	
+	var xhr = new XMLHttpRequest();
 	xhr.open("DELETE", urlPrefix + "/user/" + userName + "/query/" + document.getElementById(queryId).value)
 	xhr.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
-			location.reload()
+			//location.reload()
 		}
 	}
 	xhr.send(null)
@@ -287,7 +291,7 @@ function paintUserQueries(userQueries){
 					var delButtons = document.querySelectorAll(".deleteButton")
 					delButtons.forEach(delButton => {
 						$(delButton).off('click').on("click", function () {
-							deleteOnClick(username, this.id.replace("delete", "queryName"));
+							deleteOnClick(username, this.id.replace("delete", "queryName"),$(this));
 							
 						})
 					})
