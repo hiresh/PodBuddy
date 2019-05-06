@@ -105,7 +105,7 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("placeholder", "Search for Query Name")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
 	offlineMarkerDiv.setAttribute("id","offlineMarker");
-	offlineMarkerDiv.setAttribute("style","padding-bottom:4px");
+	offlineMarkerDiv.setAttribute("class","alert alert-danger small mb-2 p-0");
 	
 	// root.appendChild(searchInput)
 	chrome.storage.local.get(['userQueriesData'],function(result){
@@ -191,7 +191,8 @@ function paintUserQueries(userQueries){
 	outerList.setAttribute("id","accordion");
 	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
 	$(offlineMarkerDiv).hide();
-	$(offlineMarkerDiv).html("<div style='background: antiquewhite;'><img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/><b><h8 style='font-size:smaller;'>offline, add/delete features not supported</h8><b></div>");
+	// $(offlineMarkerDiv).html("<div style='background: antiquewhite;'><img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/><b><h8 style='font-size:smaller;'>offline, add/delete features not supported</h8><b></div>");
+	$(offlineMarkerDiv).html("<img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/> <strong> Offline! </strong> add/delete features not supported");
 	
 	
 
