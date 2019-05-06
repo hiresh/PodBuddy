@@ -9,8 +9,8 @@ var root = null;
 var outerList = null;
 var innerList = null;
 
-//var urlPrefix = "http://localhost:8080/podbuddy"
- var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
+var urlPrefix = "http://192.168.43.114:8080/podbuddy"
+ // var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
 	root = document.getElementById("root");
@@ -244,7 +244,7 @@ function paintUserQueries(userQueries){
 					divCardInner.setAttribute("data-parent","#accordion");
 					var queryString = "";
 					userQuery.queries.forEach(query => {
-
+						console.log(query);
 						queryString += ""
 							+ "<div class=\"queryInfo\"><div class=\"titleArea\"><div class=\"title\"><i class=\"caret-link fa fa-arrow-circle-left\" >&nbsp</i>" + query.queryName + "</div>"
 							+ "<div class=\"buttonArea\">"
@@ -252,10 +252,10 @@ function paintUserQueries(userQueries){
 							+ "<button class=\"copyButton btn btn-outline-dark btn-sm\" id=\"button_" + counter + "\"><i class=\"fa fa-copy\"></i></button></div></div>"
 							+ "<div class=\"blockquote-footer\">" + query.description + "</div>"
 							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
-							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query.queryName + "\" /></div>"
+							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query._id + "\" /></div>"
 							
 						counter++;
-						console.log(queryString);
+						// console.log(queryString);
 					})
 
 					divCardBody.innerHTML="";
@@ -356,7 +356,7 @@ function searchFunction() {
 chrome.storage.local.get(['userName'], function (result) {
 
 
-	console.log("result is " + result.userName);
+	// console.log("result is " + result.userName);
 	if (result.userName && result.userName != '') {
 		$("#regForm").hide();
 		displayUserQueries(result.userName);
