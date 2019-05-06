@@ -3,7 +3,7 @@
 * Download the zip by clicking 'Clone/Download' button 
 * Navigate to URL *chrome://extensions/* and turn on the *developer mode* option on top right corner
 * Access the *Load unpacked* option on top left corner
-* Select the folder where the previously download zip was extracted
+* Select the folder where the previously download zip was extracted and select "saveMySql" folder
 * Tiny icon for *podbuddy* will appear next to URL bar 
 * Register with your GUID after clicking on the podbuddy icon.
 
