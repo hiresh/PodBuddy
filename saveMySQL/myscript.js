@@ -10,6 +10,18 @@
 */
 
 debugger;
+$(document).ready(function(){
+$("#executeBtn").parent().parent().append("<td><button type='button' class='btn-warning' style='background:cyan' id='gpay_clearBtn'><b>Clear textarea</b></button></td>");
+
+var clrBtn = $("#gpay_clearBtn");
+
+clrBtn.on('click',function(){
+	
+	$("textarea").eq(0).val('');
+});
+	
+	
+})
 
 
  chrome.runtime.onMessage.addListener(
