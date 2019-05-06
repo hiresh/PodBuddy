@@ -9,8 +9,8 @@ var root = null;
 var outerList = null;
 var innerList = null;
 
-var urlPrefix = "http://192.168.43.114:8080/podbuddy"
- // var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
+// var urlPrefix = "http://192.168.43.114:8080/podbuddy"
+var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
 	root = document.getElementById("root");
