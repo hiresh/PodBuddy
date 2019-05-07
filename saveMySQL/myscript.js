@@ -18,6 +18,7 @@ var clrBtn = $("#gpay_clearBtn");
 clrBtn.on('click',function(){
 	
 	$("textarea").eq(0).val('alter session set current_schema=FUSION;\n\n');
+	
 });
 	
 	
@@ -47,6 +48,11 @@ clrBtn.on('click',function(){
 				  txtArea.val(txtArea.val() + "\n\n");
 			  }
          txtArea.val(txtArea.val()+"\n\n"+request.message);
+		 txtArea.animate({
+			scrollTop:txtArea[0].scrollHeight - txtArea.height()
+		 },1000,function(){
+			
+		 });
              }
 		
       }
