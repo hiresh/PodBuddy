@@ -11,7 +11,7 @@
 
 debugger;
 $(document).ready(function(){
-$("#executeBtn").parent().parent().parent().append("<tr><td style='padding-top:50'><button type='button' class='btn-warning' style='background:cyan' id='gpay_clearBtn'><b>Clear textarea</b></button></td><td>");
+$("#executeBtn").parent().parent().parent().append("<tr><td style='padding-top:50'><button type='button' class='btn-warning' style='background:cyan' id='gpay_clearBtn'><b>Reset textarea</b></button></td><td>");
 
 var clrBtn = $("#gpay_clearBtn");
 
@@ -50,7 +50,7 @@ clrBtn.on('click',function(){
          txtArea.val(txtArea.val()+"\n\n"+request.message);
 		 txtArea.animate({
 			scrollTop:txtArea[0].scrollHeight - txtArea.height()
-		 },1000,function(){
+		 },500,function(){
 			
 		 });
              }
