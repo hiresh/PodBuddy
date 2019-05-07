@@ -8,6 +8,20 @@ chrome.contextMenus.create({
 var userName = "";
 var count = 0;
 
+chrome.commands.onCommand.addListener(function(command) {
+
+	
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		//debugger;
+    var activeTab = tabs[0];
+	
+    chrome.tabs.sendMessage(activeTab.id, {"message": "clickExecuteBtn" });
+	});
+	
+	
+	
+});
+
 chrome.storage.local.get(['userName'], function (result) {
 	if (result.userName && result.userName != '') {
 		userName = result.userName;

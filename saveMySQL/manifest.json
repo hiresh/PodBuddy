@@ -10,6 +10,16 @@
   "icons": {
 	"128": "dbicon.png"
   },
+  
+  "commands": {
+    "toggle-pin-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Executes the query"
+    }
+  },
   "content_scripts": [
 	{
 		"matches":["http://*/*", "https://*/*"],
