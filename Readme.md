@@ -11,7 +11,7 @@
 
 * Right-click the selected query, click on the *Add SQL to repo* option
 * Enter Query name and description in pipe-delimited format (*my query name | its description*) 
-* The recently added query will be available for all the users to use
+* The recently added query will be visible and available for all the users to use
 * Click on the *caret icon* on the extension-page to populate the sql-worksheet's textarea with that query
 * Rest of the features are self explanatory (delete your queries, use copy button, default appearance of alter session queries)
 
