@@ -8,6 +8,7 @@ chrome.storage.local.get(['userName'], function (result) {
 var root = null;
 var outerList = null;
 var innerList = null;
+var toggleDiv = null;
 
 // var urlPrefix = "http://192.168.43.114:8080/podbuddy"
 var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
@@ -16,6 +17,7 @@ $(document).ready(function () {
 	root = document.getElementById("root");
 	outerList = document.createElement("div");
 	innerList = document.createElement("div");
+	toggleDiv = document.createElement("div");
 	searchInput = document.createElement("input");
 	offlineMarkerDiv= document.createElement("div");
 	sendURLMessage();
@@ -102,7 +104,7 @@ function displayUserQueries(userNameForQ) {
 	searchInput.setAttribute("id", "querySearch")
 	searchInput.setAttribute("type", "text")
 	searchInput.setAttribute("class","form-control form-control mb-2 mu-2");
-	searchInput.setAttribute("placeholder", "Search for Query Name")
+	searchInput.setAttribute("placeholder", "Search for Query")
 	searchInput.addEventListener('keyup', function() { searchFunction(); });
 	offlineMarkerDiv.setAttribute("id","offlineMarker");
 	offlineMarkerDiv.setAttribute("class","alert alert-danger small mb-2 p-0");
@@ -185,17 +187,21 @@ function ifNotConnectedHideDeleteIcon(hideDelIcons,showDelIcons){
 function paintUserQueries(userQueries){
 	var counter = 0;
 	var userCounter = 0;
-	outerList.innerHTML="";
+	outerList.innerHTML = "";
+
+	toggleDiv.innerHTML="<label class=\"switch\"><input id=\"searchToggle\" type=\"checkbox\"><span class=\"slider round\"></span></label>";
+	toggleDiv.innerHTML += "<label class=\"dark\" id=\"searchTxt\"> Search By <abbr style=\"text-decoration: none;\" class=\"font-weight-bold\" title='Finds with Actual Query Text'> QueryText </abbr> <label>"
+
+	outerList.appendChild(toggleDiv);
 	outerList.appendChild(searchInput);
 	outerList.appendChild(offlineMarkerDiv);
+
 	outerList.setAttribute("id","accordion");
 	outerList.setAttribute("class","accordion md-accordion accordion-5 col-sm-12 col-md-12");
+
 	$(offlineMarkerDiv).hide();
-	// $(offlineMarkerDiv).html("<div style='background: antiquewhite;'><img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/><b><h8 style='font-size:smaller;'>offline, add/delete features not supported</h8><b></div>");
 	$(offlineMarkerDiv).html("<img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/> <strong> Offline! </strong> add/delete features not supported");
 	
-	
-
 	userQueries.sort(function(a,b){
 			var x = a.user.registeredName.toLowerCase();
 			var y = b.user.registeredName.toLowerCase();			
@@ -207,6 +213,19 @@ function paintUserQueries(userQueries){
 	userQueries.sort(function(a,b){
 			if(a.user.registeredName.toLowerCase() == username.toLowerCase() ) {return -1;}
 			return 0;
+	});
+
+	$('input[id=searchToggle]').change(function(){
+    	if($(this).is(':checked')) {
+        	document.getElementById("searchTxt").innerHTML = " Search By <abbr style=\"text-decoration: none;\" class=\"font-weight-bold\" title='Finds with Query Title'> QueryTitle </abbr>";
+    	} else {
+	        document.getElementById("searchTxt").innerHTML = " Search By <abbr style=\"text-decoration: none;\" class=\"font-weight-bold\" title='Finds with Actual Query Text'> QueryText </abbr>";
+	    }
+
+	    input = document.getElementById("querySearch").value;
+
+	    if(input) searchFunction();
+
 	});
 
 	userQueries.forEach(userQuery => {
@@ -251,11 +270,10 @@ function paintUserQueries(userQueries){
 							+ (username == user ? "<div class=\"deleteButton\" id=\"delete_" + counter + "\"><i class=\"fa fa-trash\"></i></div>" : "")
 							+ "<button class=\"copyButton btn btn-outline-dark btn-sm\" id=\"button_" + counter + "\"><i class=\"fa fa-copy\"></i></button></div></div>"
 							+ "<div class=\"blockquote-footer\">" + query.description + "</div>"
-							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText + "\"/>"
+							+ "<input type=\"hidden\" class=\"qText\" id=\"query_" + counter + "\" value=\"" + query.queryText.replace('>','&gt;').replace('<','&lt;').replace(/"/g, "'") + "\"/>"
 							+ "<input type=\"hidden\" id=\"queryName_" + counter + "\" value=\"" + query._id + "\" /></div>"
 							
 						counter++;
-						// console.log(queryString);
 					})
 
 					divCardBody.innerHTML="";
@@ -319,21 +337,30 @@ function paintUserQueries(userQueries){
 
 
 function searchFunction() {
-    var input, filter,a, i,j, txtValue,varTitle,varCardInfo;
+    var input, filter,a, i,j,qTxtValue,txtValue,varTitle,varQueryTxt,varCardInfo,toggleCheck;
     input = document.getElementById("querySearch");
     filter = input.value.toUpperCase();
 
 	varCardInfo = document.getElementsByClassName("card");
+	toggleCheck = document.getElementById("searchToggle").checked;
 
 	for (i = 0; i < varCardInfo.length; i++) {
+		varCardInfo[i].style.display = "";
+
 		var varQueryInfo;		
 		var intQueryCount = 0;
 		varQueryInfo = varCardInfo[i].getElementsByClassName("queryInfo");
 
 		for (j = 0; j < varQueryInfo.length; j++) {
+			varQueryInfo[j].style.display = "";
 			varTitle = varQueryInfo[j].getElementsByClassName("title");
+			varQueryTxt = varQueryInfo[j].getElementsByClassName("qText");			
 			txtValue = varTitle[0].textContent || varTitle[0].innerText;
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			qTxtValue = varQueryTxt[0].value;
+
+			txtValue = 	toggleCheck ? txtValue : qTxtValue ;		
+
+			if (txtValue.toUpperCase().indexOf(filter) > -1 ) {
 	            varQueryInfo[j].style.display = "";
 	            intQueryCount++;
 			} else {
@@ -355,8 +382,6 @@ function searchFunction() {
 //if the storage has the key call displayUserQueries or let him register himself/herself
 chrome.storage.local.get(['userName'], function (result) {
 
-
-	// console.log("result is " + result.userName);
 	if (result.userName && result.userName != '') {
 		$("#regForm").hide();
 		displayUserQueries(result.userName);
