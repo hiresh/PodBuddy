@@ -58,6 +58,7 @@ function saveQueryToServer(text) {
 	} // Prompt section ends
 	
 	//alert ("calling fn with "+queryName+"|"+queryDescription+"|"+text)
+
 	chrome.storage.local.get(['userName'], function (result) {
 		if (result.userName && result.userName != '') {
 			userName = result.userName;
@@ -71,7 +72,7 @@ function saveQueryToServer(text) {
 function saveQueryViaContextMenu(queryName, queryDescription, text,userName) {
 
 	var query = {
-		"queryText": text.selectionText,
+		"queryText": text.selectionText.replace(/"/g, "'"),
 		"queryName": queryName,
 		"description": queryDescription,
 		"author": userName,
