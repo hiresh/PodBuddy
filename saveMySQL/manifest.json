@@ -28,7 +28,7 @@
 	}
   ],
   "permissions": [
-          "contextMenus", "http://*/*", "https://*/*","storage","activeTab","tabs"
+          "contextMenus", "http://*/*", "https://*/*","storage","activeTab","tabs","notifications"
         ],
   "background": {
 	"scripts": ["background.js"]
