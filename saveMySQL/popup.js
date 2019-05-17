@@ -61,6 +61,19 @@ function deleteOnClick(userName, queryId,jqDeleteBtn) {
 function displayRegisterForm() {
 
 	$("#regForm").show();
+	
+	//server call to fetch teams
+	
+
+	$.ajax({url: urlPrefix+"/teams", success: function(result){
+		var dropdownHtml="";
+		result.forEach(team=>{
+			dropdownHtml+="<option value='"+team._id+"'>"+team.teamName+"</option>"
+		});
+		$("#teamId").html(dropdownHtml);
+		
+	}});
+	
 
 	//bind event
 	$('#userNameButton').on('click', function () {
