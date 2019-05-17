@@ -10,8 +10,8 @@ var outerList = null;
 var innerList = null;
 var toggleDiv = null;
 
-// var urlPrefix = "http://192.168.43.114:8080/podbuddy"
-var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
+ var urlPrefix = "http://localhost:8080/podbuddy"
+//var urlPrefix = "http://slc12fzm.us.oracle.com:8080/podbuddy/"
 var userQueries = ""
 $(document).ready(function () {
 	root = document.getElementById("root");
@@ -67,13 +67,16 @@ function displayRegisterForm() {
 		debugger;
 		var userId = $('#userName').val();
 		//call api to add the user
+		var teamId=$('#teamId').val();
+		//we need to add the user teamId here and add the parameter to controller
+		
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", urlPrefix + "/user", true);
 		xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		var userData = {
 			"registeredName": userId,
-			"lastRequest": null
-
+			"lastRequest": null,
+			"teamId":teamId
 		}
 		xhr.onreadystatechange = function () {
 			if (this.readyState == 4 && this.status == 200) {
