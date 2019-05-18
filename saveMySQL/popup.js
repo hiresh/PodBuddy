@@ -82,14 +82,24 @@ function displayRegisterForm() {
 		//call api to add the user
 		var teamId=$('#teamId').val();
 		//we need to add the user teamId here and add the parameter to controller
-		
+		var pwd = $('#pass').val();
+		var cmPwd = $('#cmPass').val();
+
+		if(pwd !== cmPwd){
+			$("#regError").html("<h3>Passwords do not match</h3>");
+			return;
+		}
+		console.log(pwd);
+		var hashPwd = sha256(userId+pwd);
+		console.log(hashPwd);
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", urlPrefix + "/user", true);
 		xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		var userData = {
 			"registeredName": userId,
 			"lastRequest": null,
-			"teamId":teamId
+			"teamId":teamId,
+			"hashedPassword":hashPwd
 		}
 		xhr.onreadystatechange = function () {
 			if (this.readyState == 4 && this.status == 200) {
@@ -101,7 +111,43 @@ function displayRegisterForm() {
 
 				}
 				else {
-					$("#regError").html("<h3> User name already exists</h3>");
+					$("#regError").html("<h3>User name already exists. Please login.</h3><br/><h3>In case you forgot Password, please contact PodBuddy Admin</h3>");
+				}
+			}
+		};
+		xhr.send(JSON.stringify(userData));
+
+		//store the userName if uniqueID
+
+	});
+
+	//bind event
+	$('#loginButton').on('click', function () {
+		debugger;
+		var userId = $('#userName').val();
+		//call api to add the user
+		var pwd = $('#pass').val();
+		console.log(pwd);
+		var hashPwd = sha256(userId+pwd);
+		console.log(hashPwd);
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", urlPrefix + "/login", true);
+		xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+		var userData = {
+			"name": userId,
+			"hashedPassword":hashPwd
+		}
+		xhr.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				//alert(this.responseText);
+				if (this.responseText && this.responseText != 'false') {
+					chrome.storage.local.set({ "userName": userId }, function () {
+						displayUserQueries(userId);
+					});
+
+				}
+				else {
+					$("#regError").html("<h3>Invaild Password entered</h3>");
 				}
 			}
 		};

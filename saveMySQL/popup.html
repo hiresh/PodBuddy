@@ -8,7 +8,7 @@
   <script src="jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="popup.js"></script>
-
+  <script type="text/javascript" src="sha256.js"></script>
 </head>
 
 
@@ -16,7 +16,12 @@
   <div id="root" class="popup">
     <div id="regForm">
       <div>
-        <input type="text" id="userName" placeholder="Enter unique user name" />
+         <input type="text" id="userName" placeholder="Enter unique user name" />
+        <br/>
+        <input type="password" id="pass" placeholder="Enter Password"/>
+        <br/>
+        <input type="password" id="cmPass" placeholder="Confirm Password">
+        <br/>
 	<select id='teamId'>
 	<!--do not change the value of these dropdowns in production env
   <option value="5cde3a94ab998e08b4256044">Global Payroll</option>
@@ -27,10 +32,13 @@
  <option value="5cde3a2dab998e08b4256043">OTL</option>
  -->
 	</select>
-		
+      <br/> 
+      <button id="userNameButton" class="btn-medium">Register</button> <br/> <button id="loginButton" class="btn-medium">Login</button> 
+      <br/>
+
+    <br/>
         <div id="regError"></div>
       </div>
-      <button id="userNameButton" class="btn-medium">Register</button>
     </div>
 
   </div>
