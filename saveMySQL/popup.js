@@ -5,6 +5,8 @@ chrome.storage.local.get(['userName'], function (result) {
 	}
 })
 
+
+
 var root = null;
 var outerList = null;
 var innerList = null;
@@ -20,7 +22,30 @@ $(document).ready(function () {
 	toggleDiv = document.createElement("div");
 	searchInput = document.createElement("input");
 	offlineMarkerDiv= document.createElement("div");
+	$("#userNameButton").hide();
+	$("#teamIdGrp").hide();
+	$("#cmPassGrp").hide();
+	$("#errorMsg").hide();
 	sendURLMessage();
+
+	$('input[id=regToggle]').change(function(){
+    	if($(this).is(':checked')) {
+        	document.getElementById("regTxt").innerHTML = "Toggle to Login";
+        	$("#loginButton").hide();
+        	$("#userNameButton").show();
+        	$("#teamIdGrp").show();
+			$("#cmPassGrp").show();
+			$("#errorMsg").hide();
+    	} else {
+	        document.getElementById("regTxt").innerHTML = "Toggle to Register";
+	        $("#loginButton").show();
+	        $("#userNameButton").hide();
+	        $("#teamIdGrp").hide();
+			$("#cmPassGrp").hide();
+			$("#errorMsg").hide();
+	    }	
+	});
+
 });
 
 function sendURLMessage(){
@@ -86,7 +111,8 @@ function displayRegisterForm() {
 		var cmPwd = $('#cmPass').val();
 
 		if(pwd !== cmPwd){
-			$("#regError").html("<h3>Passwords do not match</h3>");
+			$("#regError").html("Passwords do not match");
+			$("#errorMsg").show();
 			return;
 		}
 		console.log(pwd);
@@ -106,12 +132,14 @@ function displayRegisterForm() {
 				//alert(this.responseText);
 				if (this.responseText && this.responseText != 'false') {
 					chrome.storage.local.set({ "userName": userId }, function () {
+						username = userId;
 						displayUserQueries(userId);
 					});
 
 				}
 				else {
-					$("#regError").html("<h3>User name already exists. Please login.</h3><br/><h3>In case you forgot Password, please contact PodBuddy Admin</h3>");
+					$("#regError").html("User name already exists. Please login.<br/>In case you forgot Password, please contact PodBuddy Admin");
+					$("#errorMsg").show();
 				}
 			}
 		};
@@ -139,15 +167,17 @@ function displayRegisterForm() {
 		}
 		xhr.onreadystatechange = function () {
 			if (this.readyState == 4 && this.status == 200) {
-				//alert(this.responseText);
+				// alert(this.responseText);
 				if (this.responseText && this.responseText != 'false') {
 					chrome.storage.local.set({ "userName": userId }, function () {
+						username = userId;
 						displayUserQueries(userId);
 					});
-
 				}
 				else {
-					$("#regError").html("<h3>Invaild Password entered</h3>");
+					// document.getElementById("regError").innerHTML = "<h3>Invaild Password entered</h3>";
+					$("#regError").html("Invaild Password entered");
+					$("#errorMsg").show();
 				}
 			}
 		};
@@ -264,6 +294,7 @@ function paintUserQueries(userQueries){
 	$(offlineMarkerDiv).hide();
 	$(offlineMarkerDiv).html("<img alt='offline' src='offline.png' style=' width: 25px;padding-left: 4px;padding-bottom: 4px;'/> <strong> Offline! </strong> add/delete features not supported");
 	
+	debugger;
 	userQueries.sort(function(a,b){
 			var x = a.user.registeredName.toLowerCase();
 			var y = b.user.registeredName.toLowerCase();			
